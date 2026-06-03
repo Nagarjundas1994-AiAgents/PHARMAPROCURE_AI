@@ -1,0 +1,11 @@
+ID,po_ID,narcoticsApproved,licenseVerified,coldChainConfirmed,serialNumberRequired,regulatoryNotes,checkedBy,checkedAt,status
+CC1,PO1,true,true,false,false,Standard antibiotics. No special handling.,checker1,2026-05-20T10:30:00Z,Passed
+CC2,PO2,false,true,false,false,OTC painkiller.,checker1,2026-05-22T11:30:00Z,Passed
+CC3,PO3,false,true,true,false,Vaccines require cold chain.,checker2,2026-05-25T09:00:00Z,Passed
+CC4,PO4,true,true,false,true,Narcotics require serial tracking and special license.,checker2,2026-05-26T09:30:00Z,Passed
+CC5,PO5,false,true,false,false,Standard PPE.,checker1,2026-05-27T10:30:00Z,Passed
+CC6,PO6,false,true,true,false,Insulin requires strict cold chain.,,,Pending
+CC7,PO7,false,true,false,false,Standard surgical supplies.,,,Pending
+CC8,PO8,false,true,true,false,Biologics require cold chain.,,,Pending
+CC9,PO9,false,true,false,false,Standard diagnostic kits.,checker1,2026-05-30T14:30:00Z,Passed
+CC10,PO10,false,true,false,false,Standard generics.,,,Pending

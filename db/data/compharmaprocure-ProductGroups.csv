@@ -1,0 +1,11 @@
+ID,name,requiresLicense
+PG1,Antibiotics,false
+PG2,Vaccines,true
+PG3,Painkillers,false
+PG4,Narcotics,true
+PG5,Vitamins,false
+PG6,Surgical Equipment,false
+PG7,Cold Chain Medicines,true
+PG8,Generics,false
+PG9,Biologics,true
+PG10,Diagnostic Kits,false

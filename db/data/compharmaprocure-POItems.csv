@@ -1,0 +1,13 @@
+ID,po_ID,lineNumber,product_ID,description,quantity,unitPrice,discount,taxRate,requestedQty,deliveredQty,deliveryStatus
+I1,PO1,1,P1,Amoxicillin 500mg,500,120.50,0,18,500,500,Delivered
+I2,PO1,2,P5,Vitamin D3,100,110.00,0,18,100,100,Delivered
+I3,PO2,1,P2,Paracetamol 650mg,1000,25.00,0,18,1000,1000,Delivered
+I4,PO3,1,P3,Hepatitis B Vaccine,100,450.00,0,18,100,0,Pending
+I5,PO4,1,P4,Morphine Sulfate 10mg,100,85.00,0,18,100,0,Pending
+I6,PO5,1,P6,Surgical Mask N95,100,350.00,0,18,100,0,Pending
+I7,PO6,1,P7,Insulin Glargine,150,850.00,0,18,150,0,Pending
+I8,PO7,1,P6,Surgical Mask N95,50,350.00,0,18,50,0,Pending
+I9,PO7,2,P10,Rapid Antigen Test,100,250.00,0,18,100,0,Pending
+I10,PO8,1,P9,Adalimumab 40mg,20,12500.00,0,18,20,0,Pending
+I11,PO9,1,P10,Rapid Antigen Test,100,250.00,0,18,100,100,Delivered
+I12,PO10,1,P8,Metformin 500mg,1000,45.00,0,18,1000,0,Pending

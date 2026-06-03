@@ -1,0 +1,11 @@
+ID,vendor_ID,contractNumber,startDate,endDate,maxValue,currentSpend,status,terms
+C1,V1,CONT-2026-001,2026-01-01,2026-12-31,1000000.00,250000.00,Active,Standard supply terms for antibiotics
+C2,V2,CONT-2026-002,2026-01-01,2027-12-31,2500000.00,800000.00,Active,Bulk painkiller supply agreement
+C3,V3,CONT-2025-015,2025-06-01,2026-05-31,500000.00,480000.00,Active,Vaccine supply with cold chain
+C4,V4,CONT-2026-003,2026-01-01,2028-12-31,1500000.00,100000.00,Active,Surgical equipment maintenance
+C5,V5,CONT-2025-020,2025-01-01,2025-12-31,800000.00,800000.00,Expired,Global meds distribution
+C6,V6,CONT-2026-004,2026-02-01,2027-01-31,300000.00,50000.00,Active,Ayurvedic raw materials
+C7,V7,CONT-2026-005,2026-01-01,2026-12-31,2000000.00,600000.00,Active,Strict cold chain logistics
+C8,V8,CONT-2026-006,2026-01-01,2029-12-31,5000000.00,1200000.00,Active,Long term generic supply
+C9,V9,CONT-2024-010,2024-01-01,2025-12-31,1000000.00,1000000.00,Terminated,Biologics supply terminated due to compliance
+C10,V10,CONT-2026-007,2026-03-01,2027-02-28,400000.00,20000.00,Active,Diagnostic kits annual contract

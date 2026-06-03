@@ -1,0 +1,37 @@
+{
+  "name": "PHARMAPROCURE_AI",
+  "version": "1.0.0",
+  "dependencies": {
+    "@cap-js/hana": "^2",
+    "@sap/cds": "^9",
+    "@sap/cds-mtxs": "^3",
+    "@sap/xssec": "^4",
+    "@cap-js/audit-logging": ">=0",
+    "@cap-js/notifications": "*"
+  },
+  "devDependencies": {
+    "@cap-js/sqlite": "^2.4",
+    "@sap/cds-dk": "^9"
+  },
+  "scripts": {
+    "start": "cds-serve"
+  },
+  "private": true,
+  "cds": {
+    "requires": {
+      "[production]": {
+        "auth": "xsuaa",
+        "multitenancy": true
+      },
+      "[with-mtx]": {
+        "multitenancy": true
+      },
+      "connectivity": true,
+      "destinations": true,
+      "html5-repo": true,
+      "portal": true,
+      "application-logging": true
+    },
+    "profile": "with-mtx-sidecar"
+  }
+}

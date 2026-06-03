@@ -1,0 +1,11 @@
+ID,name,skuCode,category,unitOfMeasure,unitPrice,stockQty,reorderPoint,requiresRefrigeration,narcotic,hsnCode,productGroup_ID
+P1,Amoxicillin 500mg,SKU-AMX-500,Antibiotic,BOX,120.50,500,50,false,false,30041010,PG1
+P2,Paracetamol 650mg,SKU-PAR-650,Painkiller,STRIP,25.00,2000,200,false,false,30049099,PG3
+P3,Hepatitis B Vaccine,SKU-HBV-01,Vaccine,VIAL,450.00,100,20,true,false,30022000,PG2
+P4,Morphine Sulfate 10mg,SKU-MOR-10,Narcotic,AMP,85.00,50,10,false,true,30049011,PG4
+P5,Vitamin D3 60k,SKU-VIT-D3,Vitamin,STRIP,110.00,1000,100,false,false,29362990,PG5
+P6,Surgical Mask N95,SKU-MSK-N95,Equipment,BOX,350.00,300,50,false,false,63079090,PG6
+P7,Insulin Glargine,SKU-INS-GLA,Cold Chain,VIAL,850.00,150,30,true,false,30043100,PG7
+P8,Metformin 500mg,SKU-MET-500,Generic,BOX,45.00,1500,150,false,false,30049019,PG8
+P9,Adalimumab 40mg,SKU-ADA-40,Biologic,PFS,12500.00,20,5,true,false,30021500,PG9
+P10,Rapid Antigen Test,SKU-RAT-01,Diagnostic,KIT,250.00,800,100,false,false,38220090,PG10

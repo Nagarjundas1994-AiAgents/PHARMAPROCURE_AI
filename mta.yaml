@@ -1,0 +1,231 @@
+_schema-version: 3.3.0
+ID: PHARMAPROCURE_AI
+version: 1.0.0
+description: "A simple CAP project."
+parameters:
+  enable-parallel-deployments: true
+  deploy_mode: html5-repo
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production
+modules:
+  - name: PHARMAPROCURE_AI-srv
+    type: nodejs
+    path: gen/srv
+    parameters:
+      instances: 1
+      buildpack: nodejs_buildpack
+    build-parameters:
+      builder: npm-ci
+    provides:
+      - name: srv-api # required by consumers of CAP services (e.g. approuter)
+        properties:
+          srv-url: ${default-url}
+    requires:
+      - name: PHARMAPROCURE_AI-auth
+      - name: PHARMAPROCURE_AI-db
+      - name: PHARMAPROCURE_AI-connectivity
+      - name: PHARMAPROCURE_AI-destination
+      - name: PHARMAPROCURE_AI-logging
+      - name: PHARMAPROCURE_AI-auditlog
+
+  - name: PHARMAPROCURE_AI-mtx
+    type: nodejs
+    path: gen/mtx/sidecar
+    requires:
+      - name: PHARMAPROCURE_AI-auth
+      - name: PHARMAPROCURE_AI-db
+      - name: PHARMAPROCURE_AI-registry
+      - name: app-api
+        properties:
+          SUBSCRIPTION_URL: ~{app-protocol}://\${tenant_subdomain}-~{app-uri}
+      - name: PHARMAPROCURE_AI-destination
+      - name: PHARMAPROCURE_AI-html5-runtime
+      - name: PHARMAPROCURE_AI-html5-repo-host
+      - name: PHARMAPROCURE_AI-portal
+      - name: PHARMAPROCURE_AI-logging
+    build-parameters:
+      builder: npm-ci
+    parameters:
+      instances: 1
+      memory: 256M
+      disk-quota: 512M
+    hooks:
+      - name: upgrade-all
+        type: task
+        phases:
+          - blue-green.application.before-start.idle
+          - deploy.application.before-start
+        parameters:
+          name: upgrade
+          memory: 512M # increase as required
+          disk-quota: 768M # increase as required
+          command: cds-mtx upgrade '*'
+    provides:
+      - name: mtx-api
+        properties:
+          mtx-url: ${default-url}
+  - name: PHARMAPROCURE_AI
+    type: approuter.nodejs
+    path: app/router
+    parameters:
+      keep-existing-routes: true
+      disk-quota: 256M
+      memory: 256M
+    properties:
+      TENANT_HOST_PATTERN: "^(.*)-${default-uri}"
+    requires:
+      - name: srv-api
+        group: destinations
+        properties:
+          name: srv-api # must be used in xs-app.json as well
+          url: ~{srv-url}
+          forwardAuthToken: true
+      - name: mtx-api
+        group: destinations
+        properties:
+          name: mtx-api # must be used in xs-app.json as well
+          url: ~{mtx-url}
+      - name: PHARMAPROCURE_AI-auth
+      - name: PHARMAPROCURE_AI-destination
+      - name: PHARMAPROCURE_AI-html5-runtime
+      - name: PHARMAPROCURE_AI-portal
+      - name: PHARMAPROCURE_AI-logging
+    provides:
+      - name: app-api
+        properties:
+          app-protocol: ${protocol}
+          app-uri: ${default-uri}
+
+  - name: PHARMAPROCURE_AI-app-deployer
+    type: com.sap.application.content
+    path: gen
+    build-parameters:
+      build-result: app/
+      requires:
+    requires:
+      - name: PHARMAPROCURE_AI-auth
+      - name: srv-api
+      - name: PHARMAPROCURE_AI-html5-repo-host
+        parameters:
+          content-target: true
+          config:
+            HTML5Runtime_enabled: true
+
+  - name: PHARMAPROCURE_AI-portal-deployer
+    type: com.sap.application.content
+    path: app/portal
+    parameters:
+      config:
+        TENANT_HOST_PATTERN: "^(.*)-${default-uri}"
+    requires:
+      - name: PHARMAPROCURE_AI-portal
+        parameters:
+          content-target: true
+          service-key:
+            name: PHARMAPROCURE_AI-portal-key
+            config:
+              content-endpoint: developer
+      - name: PHARMAPROCURE_AI-auth
+      - name: PHARMAPROCURE_AI-html5-repo-host
+      - name: PHARMAPROCURE_AI-app-deployer
+    deployed-after:
+      - PHARMAPROCURE_AI-app-deployer
+  - name: notification-content-deployment
+    type: nodejs
+    path: gen/srv
+    parameters:
+      no-route: true
+      no-start: true
+      memory: 256MB
+      disk-quota: 1GB
+      tasks:
+        - name: notification-content-deployment
+          command: "node node_modules/@cap-js/notifications/lib/content-deployment.js"
+          memory: 256MB
+          disk-quota: 1GB
+    requires:
+      - name: PHARMAPROCURE_AI-destination
+
+resources:
+  - name: PHARMAPROCURE_AI-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        xsappname: PHARMAPROCURE_AI-${org}-${space}
+        tenant-mode: shared
+        oauth2-configuration:
+          credential-types:
+            - "binding-secret"
+            - "x509"
+          redirect-uris:
+            - https://*~{app-api/app-uri}/**
+    requires:
+      - name: app-api
+  - name: PHARMAPROCURE_AI-db
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: service-manager
+      service-plan: container
+  - name: PHARMAPROCURE_AI-registry
+    type: org.cloudfoundry.managed-service
+    requires:
+      - name: mtx-api
+    parameters:
+      service: saas-registry
+      service-plan: application
+      config:
+        xsappname: PHARMAPROCURE_AI-${org}-${space}
+        appName: PHARMAPROCURE_AI-${org}-${space}
+        displayName: PHARMAPROCURE_AI
+        description: A simple CAP project.
+        category: 'Category'
+        appUrls:
+          getDependencies: ~{mtx-api/mtx-url}/-/cds/saas-provisioning/dependencies
+          onSubscription: ~{mtx-api/mtx-url}/-/cds/saas-provisioning/tenant/{tenantId}
+          onSubscriptionAsync: true
+          onUnSubscriptionAsync: true
+          onUpdateDependenciesAsync: true
+          callbackTimeoutMillis: 300000 # Increase if your deployments are taking longer than that
+  - name: PHARMAPROCURE_AI-connectivity
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: connectivity
+      service-plan: lite
+  - name: PHARMAPROCURE_AI-destination
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: destination
+      service-plan: lite
+
+  - name: PHARMAPROCURE_AI-html5-repo-host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-host
+  - name: PHARMAPROCURE_AI-html5-runtime
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-runtime
+  - name: PHARMAPROCURE_AI-portal
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: portal
+      service-plan: standard
+  - name: PHARMAPROCURE_AI-logging
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: application-logs
+      service-plan: standard
+  - name: PHARMAPROCURE_AI-auditlog
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: auditlog
+      service-plan: premium

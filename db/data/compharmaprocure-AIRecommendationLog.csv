@@ -1,0 +1,11 @@
+ID,po_ID,agentName,decision,confidenceScore,reasoning,toolsUsed,tokensUsed,latencyMs
+LOG1,PO1,Orchestrator,APPROVE,92.0,All checks passed. Budget is sufficient. Vendor is reliable.,"[""get_po_details"", ""check_budget"", ""check_compliance""]",1500,2500
+LOG2,PO2,Orchestrator,APPROVE,95.0,Standard reorder. No issues.,"[""get_po_details"", ""check_budget""]",1200,2100
+LOG3,PO4,Orchestrator,MANUAL_REVIEW,65.0,Contains narcotics. Requires manual approval per compliance policy.,"[""get_po_details"", ""check_compliance""]",1800,3200
+LOG4,PO5,Orchestrator,REJECT,88.0,Vendor Global Meds has HIGH risk score and recent delivery delays.,"[""get_po_details"", ""get_vendor_history""]",1600,2800
+LOG5,PO9,Orchestrator,APPROVE,98.0,Standard diagnostic reorder. Vendor is reliable.,"[""get_po_details"", ""check_budget""]",1100,1900
+LOG6,PO1,po-review,APPROVE,94.0,Financials are reasonable. Prices match market average.,"[""get_po_details"", ""get_similar_approved_pos""]",800,1200
+LOG7,PO4,compliance-check,MANUAL_REVIEW,60.0,Item contains Morphine. Schedule H1 drug.,"[""check_compliance""]",600,900
+LOG8,PO5,vendor-risk,REJECT,90.0,Vendor has 3 delayed shipments in the last quarter.,"[""get_vendor_history""]",700,1100
+LOG9,PO2,budget-check,APPROVE,99.0,Department has 55% budget remaining.,"[""check_budget""]",400,600
+LOG10,PO9,compliance-check,APPROVE,100.0,No special handling required for diagnostic kits.,"[""check_compliance""]",300,500
